@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ConfigProvider, theme } from 'antd';
 import ruRU from 'antd/locale/ru_RU';
-import Sidebar from './components/Sidebar';
+import Sidebar from './components/Sidebar/Sidebar.tsx';
 import Dashboard from './pages/Dashboard';
 import TextAnalyzer from './pages/TextAnalyzer';
 import UniquenessChecker from './pages/UniquenessChecker';
