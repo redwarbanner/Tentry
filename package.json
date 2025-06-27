@@ -1,9 +1,47 @@
 {
+  "name": "tentry",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
   "dependencies": {
-    "jodit-react": "^5.2.19",
-    "react-quill": "^2.0.0"
+    "@lexical/code": "^0.32.1",
+    "@lexical/file": "^0.32.1",
+    "@lexical/headless": "^0.32.1",
+    "@lexical/html": "^0.32.1",
+    "@lexical/link": "^0.32.1",
+    "@lexical/list": "^0.32.1",
+    "@lexical/react": "^0.32.1",
+    "@lexical/rich-text": "^0.32.1",
+    "@lexical/selection": "^0.32.1",
+    "@lexical/utils": "^0.32.1",
+    "antd": "^5.26.2",
+    "axios": "^1.10.0",
+    "cheerio": "^1.1.0",
+    "dayjs": "^1.11.13",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.6.2",
+    "sass": "^1.89.2",
+    "zustand": "^5.0.6"
   },
   "devDependencies": {
-    "@types/react": "^19.1.8"
+    "@eslint/js": "^9.29.0",
+    "@types/cheerio": "^0.22.35",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.5.2",
+    "eslint": "^9.29.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^16.2.0",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.34.1",
+    "vite": "^7.0.0"
   }
 }
