@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "jodit-react": "^5.2.19",
+    "react-quill": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.8"
+  }
+}
