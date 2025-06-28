@@ -11,30 +11,30 @@ const Sidebar = () => {
   const menuItems = getMenuItems();
 
   return (
-      <div className="sidebar">
-        <div className="top">
-          <div className="branding">
-            <BulbOutlined className="icon"/>
-            <h1>Tentry</h1>
-          </div>
+    <div className="sidebar">
+      <div className="top">
+        <div className="branding">
+          <BulbOutlined className="icon" />
+          <h1>Tentry</h1>
         </div>
+      </div>
 
-        <Menu
-            mode="inline"
-            selectedKeys={[location.pathname]}
-            items={menuItems}
-            className="menu"
-        />
+      <Menu mode="inline" selectedKeys={[location.pathname]} items={menuItems} className="menu" />
 
-        <div className="theme-toggle-switch" onClick={toggleTheme} role="button" aria-label="Переключить тему">
-          <div className={`switch ${isDark ? 'dark' : 'light'}`}>
-            <div className="slider">
-              <div className="icon sun">☀️</div>
-              <div className="icon moon">🌙</div>
-            </div>
+      <div
+        className="theme-toggle-switch"
+        onClick={toggleTheme}
+        role="button"
+        aria-label="Переключить тему"
+      >
+        <div className={`switch ${isDark ? 'dark' : 'light'}`}>
+          <div className="slider">
+            <div className="icon sun">☀️</div>
+            <div className="icon moon">🌙</div>
           </div>
         </div>
       </div>
+    </div>
   );
 };
 

@@ -6,6 +6,6 @@ export function useTheme() {
 
   return {
     isDark,
-    toggleTheme
+    toggleTheme,
   };
 }

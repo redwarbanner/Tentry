@@ -1,0 +1,40 @@
+.text-stats-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 16px;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.toxicity-tag {
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-weight: 500;
+}
+
+.description {
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}

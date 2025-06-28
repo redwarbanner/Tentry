@@ -1,5 +1,11 @@
 import { create } from 'zustand';
-import type { AppState, TextAnalysisResult, UniquenessCheck, PageAnalysis, SavedText } from '../types';
+import type {
+  AppState,
+  TextAnalysisResult,
+  UniquenessCheck,
+  PageAnalysis,
+  SavedText,
+} from '../types';
 
 interface StoreActions {
   setCurrentText: (text: string) => void;
@@ -38,14 +44,17 @@ export const useStore = create<AppState & StoreActions>((set, get) => ({
     localStorage.setItem('tentry-theme', JSON.stringify(newTheme));
     set({ theme: newTheme });
   },
-  addSavedText: (savedText: SavedText) => set((state) => ({ savedTexts: [...state.savedTexts, savedText] })),
-  updateSavedText: (updatedText: SavedText) => set((state) => {
-    const index = state.savedTexts.findIndex((text) => text.id === updatedText.id);
-    const newSavedTexts = [...state.savedTexts];
-    if (index !== -1) newSavedTexts[index] = updatedText;
-    return { savedTexts: newSavedTexts };
-  }),
-  deleteSavedText: (id: string) => set((state) => ({
-    savedTexts: state.savedTexts.filter((text) => text.id !== id),
-  })),
+  addSavedText: (savedText: SavedText) =>
+    set(state => ({ savedTexts: [...state.savedTexts, savedText] })),
+  updateSavedText: (updatedText: SavedText) =>
+    set(state => {
+      const index = state.savedTexts.findIndex(text => text.id === updatedText.id);
+      const newSavedTexts = [...state.savedTexts];
+      if (index !== -1) newSavedTexts[index] = updatedText;
+      return { savedTexts: newSavedTexts };
+    }),
+  deleteSavedText: (id: string) =>
+    set(state => ({
+      savedTexts: state.savedTexts.filter(text => text.id !== id),
+    })),
 }));

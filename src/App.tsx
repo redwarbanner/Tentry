@@ -3,13 +3,14 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { ConfigProvider, theme } from 'antd';
 import ruRU from 'antd/locale/ru_RU';
 import Sidebar from './components/Sidebar/Sidebar.tsx';
-import Dashboard from './pages/Dashboard';
-import TextAnalyzer from './pages/TextAnalyzer';
-import UniquenessChecker from './pages/UniquenessChecker';
-import PageAnalyzer from './pages/PageAnalyzer';
-import Editor from './pages/Editor';
+import Dashboard from './pages/Dashboard/Dashboard.tsx';
+import TextAnalyzer from './pages/TextAnalyzer/TextAnalyzer.tsx';
+import UniquenessChecker from './pages/UniquenessChecker/UniquenessChecker.tsx';
+
+import Editor from './pages/Editor/Editor.tsx';
 import { useTheme } from './hooks/useTheme';
 import './styles/globals.scss';
+import PageAnalyzer from './pages/PageAnalyzer/PageAnalyzer.tsx';
 
 function App() {
   const { isDark } = useTheme();

@@ -1,0 +1,21 @@
+.card {
+    height: 100%;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.icon {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.description {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+}
