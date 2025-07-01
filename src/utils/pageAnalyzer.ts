@@ -1,56 +1,63 @@
 import type { PageAnalysis } from '../types';
 
+async function fetchWithProxy(url: string): Promise<string> {
+  const encodedUrl = encodeURIComponent(url);
+
+  // Прокси 1 — AllOrigins
+  try {
+    const firstResponse = await fetch(`https://api.allorigins.win/get?url=${encodedUrl}`);
+    if (!firstResponse.ok) {
+      throw new Error(`AllOrigins: ${String(firstResponse.status)}`);
+    }
+    const data = (await firstResponse.json()) as { contents: string };
+    if (!data.contents) {
+      throw new Error('AllOrigins вернул пустой ответ');
+    }
+    return data.contents;
+  } catch (e) {
+    console.warn('AllOrigins failed, trying fallback proxy:', e);
+  }
+
+  // Прокси 2 — CodeTabs
+  try {
+    const secondResponse = await fetch(`https://api.codetabs.com/v1/proxy/?quest=${encodedUrl}`);
+    if (!secondResponse.ok) {
+      throw new Error(`AllOrigins: ${String(secondResponse.status)}`);
+    }
+    return await secondResponse.text();
+  } catch (e) {
+    console.error('CodeTabs also failed:', e);
+    throw new Error('Не удалось загрузить страницу через оба прокси');
+  }
+}
+
 export async function analyzePage(url: string): Promise<PageAnalysis> {
   try {
-    // Проверяем URL
-    new URL(url);
+    new URL(url); // validate
 
-    // Для демонстрации используем простой подход с fetch
-    // В реальном проекте потребуется прокси-сервер для обхода CORS
-    const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
+    const html = await fetchWithProxy(url);
 
-    if (!response.ok) {
-      throw new Error('Не удалось загрузить страницу');
-    }
-
-    const data = await response.json();
-    const html = data.contents;
-
-    // Создаем временный DOM элемент для парсинга
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
 
-    // Извлекаем title
     const titleElement = doc.querySelector('title');
-    const title = titleElement ? titleElement.textContent?.trim() || '' : '';
+    const title = titleElement?.textContent?.trim() || '';
 
-    // Извлекаем description
     const descriptionElement = doc.querySelector('meta[name="description"]');
-    const description = descriptionElement
-      ? descriptionElement.getAttribute('content')?.trim() || ''
-      : '';
+    const description = descriptionElement?.getAttribute('content')?.trim() || '';
 
-    // Извлекаем заголовки H1-H6
     const headings: { level: number; text: string }[] = [];
     for (let i = 1; i <= 6; i++) {
-      const headingElements = doc.querySelectorAll(`h${i}`);
-      headingElements.forEach(element => {
-        const text = element.textContent?.trim();
+      const elements = doc.querySelectorAll(`h${String(i)}`);
+      elements.forEach(el => {
+        const text = el.textContent?.trim();
         if (text) {
-          headings.push({
-            level: i,
-            text,
-          });
+          headings.push({ level: i, text });
         }
       });
     }
 
-    return {
-      url,
-      title,
-      description,
-      headings,
-    };
+    return { url, title, description, headings };
   } catch (error) {
     return {
       url,

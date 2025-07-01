@@ -1,6 +1,10 @@
-interface StatsBarProps {
+import { Typography, Space } from 'antd';
+
+const { Paragraph, Text } = Typography;
+
+type StatsBarProps = {
   content: string;
-}
+};
 
 const StatsBar = ({ content }: StatsBarProps) => {
   if (!content) return null;
@@ -9,10 +13,12 @@ const StatsBar = ({ content }: StatsBarProps) => {
 
   return (
     <div className="stats-bar">
-      <span>
-        <strong>Символов:</strong> {content.length} | <strong>Слов:</strong> {wordCount}
-      </span>
-      <span>Автосохранение активно</span>
+      <Space direction="vertical" size={0}>
+        <Paragraph>
+          <Text strong>Символов:</Text> {content.length} <Text strong>| Слов:</Text> {wordCount}{' '}
+          <Text>Автосохранение активно</Text>
+        </Paragraph>
+      </Space>
     </div>
   );
 };

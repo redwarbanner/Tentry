@@ -1,7 +1,7 @@
 import { Card, Typography, Button } from 'antd';
 import type { ReactNode, MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from './FeatureCard.module.css';
+import './FeatureCard.css';
 
 const { Title, Paragraph } = Typography;
 
@@ -22,17 +22,12 @@ const FeatureCard = ({ icon, title, description, path }: FeatureCardProps) => {
   };
 
   return (
-    <Card
-      className={`card ${styles.card}`}
-      onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-4px)')}
-      onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
-      onClick={() => void handleCardClick()}
-    >
-      <div className={styles.icon}>{icon}</div>
-      <Title level={4} className={styles.title}>
+    <Card className="card" onClick={() => void handleCardClick()}>
+      <div className="icon">{icon}</div>
+      <Title level={4} className="title">
         {title}
       </Title>
-      <Paragraph className={styles.description}>{description}</Paragraph>
+      <Paragraph className="description">{description}</Paragraph>
       <Button type="primary" block onClick={handleButtonClick}>
         Открыть
       </Button>

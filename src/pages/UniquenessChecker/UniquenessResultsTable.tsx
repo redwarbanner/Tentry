@@ -1,5 +1,5 @@
 import { Card, Table, Tag } from 'antd';
-import type { PhraseResult } from './types';
+import type { PhraseResult } from '../../types';
 
 interface Props {
   results: PhraseResult[];

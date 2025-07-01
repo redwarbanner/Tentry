@@ -1,0 +1,19 @@
+.emptyList {
+    text-align: left;
+    display: inline-block;
+    margin: 16px 0 0 0;
+}
+.listItem {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-secondary) !important;
+}
+
+@media (max-width: 600px) {
+    .emptyState {
+        padding: 40px 8px;
+    }
+    .emptyList {
+        font-size: 14px;
+    }
+}

@@ -76,3 +76,9 @@ export interface SavedText {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type PhraseResult = {
+  phrase: string;
+  isUnique: boolean;
+  sources?: string[];
+};

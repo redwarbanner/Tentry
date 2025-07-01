@@ -41,6 +41,9 @@ export default [
       'import/prefer-default-export': 'off',
       'react/jsx-filename-extension': [1, { extensions: ['.tsx'] }],
       '@typescript-eslint/no-unnecessary-condition': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+
     },
     settings: {
       react: {

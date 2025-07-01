@@ -6,6 +6,11 @@ import type {
   PageAnalysis,
   SavedText,
 } from '../types';
+import { storage } from './utils/storage.ts';
+
+interface Theme {
+  isDark: boolean;
+}
 
 interface StoreActions {
   setCurrentText: (text: string) => void;
@@ -18,11 +23,10 @@ interface StoreActions {
   deleteSavedText: (id: string) => void;
 }
 
-// Initialize theme from localStorage
-const getInitialTheme = () => {
+const getInitialTheme = (): Theme => {
   if (typeof window !== 'undefined') {
-    const saved = localStorage.getItem('tentry-theme');
-    return saved ? JSON.parse(saved) : { isDark: false };
+    const saved = storage.getTheme();
+    return saved ?? { isDark: false };
   }
   return { isDark: false };
 };
@@ -34,27 +38,44 @@ export const useStore = create<AppState & StoreActions>((set, get) => ({
   pageAnalysis: null,
   theme: getInitialTheme(),
   savedTexts: [],
-  // Actions
-  setCurrentText: (text: string) => set({ currentText: text }),
-  setAnalysisResult: (result: TextAnalysisResult | null) => set({ analysisResult: result }),
-  setUniquenessCheck: (check: UniquenessCheck | null) => set({ uniquenessCheck: check }),
-  setPageAnalysis: (analysis: PageAnalysis | null) => set({ pageAnalysis: analysis }),
+
+  setCurrentText: text => {
+    set({ currentText: text });
+  },
+
+  setAnalysisResult: result => {
+    set({ analysisResult: result });
+  },
+
+  setUniquenessCheck: check => {
+    set({ uniquenessCheck: check });
+  },
+
+  setPageAnalysis: analysis => {
+    set({ pageAnalysis: analysis });
+  },
+
   toggleTheme: () => {
     const newTheme = { isDark: !get().theme.isDark };
-    localStorage.setItem('tentry-theme', JSON.stringify(newTheme));
+    storage.setTheme(newTheme);
     set({ theme: newTheme });
   },
-  addSavedText: (savedText: SavedText) =>
-    set(state => ({ savedTexts: [...state.savedTexts, savedText] })),
-  updateSavedText: (updatedText: SavedText) =>
-    set(state => {
-      const index = state.savedTexts.findIndex(text => text.id === updatedText.id);
-      const newSavedTexts = [...state.savedTexts];
-      if (index !== -1) newSavedTexts[index] = updatedText;
-      return { savedTexts: newSavedTexts };
-    }),
-  deleteSavedText: (id: string) =>
+
+  addSavedText: savedText => {
+    set(state => ({
+      savedTexts: [...state.savedTexts, savedText],
+    }));
+  },
+
+  updateSavedText: updatedText => {
+    set(state => ({
+      savedTexts: state.savedTexts.map(text => (text.id === updatedText.id ? updatedText : text)),
+    }));
+  },
+
+  deleteSavedText: id => {
     set(state => ({
       savedTexts: state.savedTexts.filter(text => text.id !== id),
-    })),
+    }));
+  },
 }));

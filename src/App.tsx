@@ -16,7 +16,6 @@ function App() {
   const { isDark } = useTheme();
 
   useEffect(() => {
-    // Устанавливаем тему в data-атрибут для CSS переменных
     document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
   }, [isDark]);
 
@@ -35,7 +34,7 @@ function App() {
         <div className="app-layout">
           <Sidebar />
           <main className="main-content">
-            <Routes>
+            <Routes location={location} key={location.pathname}>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/analyzer" element={<TextAnalyzer />} />

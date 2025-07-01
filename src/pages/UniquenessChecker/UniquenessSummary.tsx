@@ -1,6 +1,6 @@
 import { Card, Typography, Progress } from 'antd';
-import styles from './styles.module.css';
-import type { PhraseResult } from './types';
+import './styles.css';
+import type { PhraseResult } from '../../types';
 
 interface Props {
   overallUniqueness: number;
@@ -8,7 +8,7 @@ interface Props {
 }
 
 const UniquenessSummary = ({ overallUniqueness, results }: Props) => {
-  const uniqueCount = results.filter(r => r.isUnique).length;
+  const uniqueCount = results.filter(result => result.isUnique).length;
   const duplicateCount = results.length - uniqueCount;
 
   const color =
@@ -23,14 +23,14 @@ const UniquenessSummary = ({ overallUniqueness, results }: Props) => {
         <Progress percent={overallUniqueness} strokeColor={color} />
       </div>
 
-      <div className={styles.resultStats}>
-        <div className={styles.resultItem}>
-          <div className={styles.resultValue}>{uniqueCount}</div>
-          <div className={styles.resultLabel}>Уникальных фраз</div>
+      <div className={'resultStats'}>
+        <div className={'resultItem'}>
+          <div className={'resultValue'}>{uniqueCount}</div>
+          <div className={'resultLabel'}>Уникальных фраз</div>
         </div>
-        <div className={styles.resultItem}>
-          <div className={styles.resultValue}>{duplicateCount}</div>
-          <div className={styles.resultLabel}>Найденных фраз</div>
+        <div className={'resultItem'}>
+          <div className={'resultValue'}>{duplicateCount}</div>
+          <div className={'resultLabel'}>Найденных фраз</div>
         </div>
       </div>
     </Card>

@@ -1,29 +1,29 @@
 import { Card, Typography, Row, Col } from 'antd';
 import FeatureGrid from './components/FeatureGrid.tsx';
 import { seoInfo } from './utils/seoInfoBlocks.ts';
-import styles from './Dashboard.module.css';
+import './Dashboard.css';
 
 const { Title, Paragraph } = Typography;
 
 const Dashboard = () => (
-  <div className={styles.container}>
-    <div className={styles.header}>
-      <Title level={1} className={styles.title}>
+  <div className="container">
+    <div className="header">
+      <Title level={1} className="title">
         SEO-блокнот Tentry
       </Title>
-      <Paragraph className={styles.subtitle}>
+      <Paragraph className="subtitle">
         Комплексный инструмент для анализа и оптимизации SEO-текстов
       </Paragraph>
     </div>
 
     <FeatureGrid />
 
-    <Card title="Возможности SEO-анализа" className={`card ${styles.infoCard}`}>
+    <Card title="Возможности SEO-анализа" className="infoCard">
       <Row gutter={[24, 24]}>
         {seoInfo.map(block => (
           <Col xs={24} md={12} key={block.title}>
             <Title level={5}>{block.title}</Title>
-            <ul className={styles.infoList}>
+            <ul className="infoList">
               {block.items.map(item => (
                 <li key={item}>{item}</li>
               ))}

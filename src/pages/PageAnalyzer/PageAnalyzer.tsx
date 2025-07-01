@@ -3,7 +3,7 @@ import { Card, Input, Button, Typography, Space, Row, Col, Alert, Tag, Divider }
 import { SearchOutlined, ClearOutlined, GlobalOutlined } from '@ant-design/icons';
 import { analyzePage, isValidUrl, formatUrl } from '../../utils/pageAnalyzer';
 import { useStore } from '../../store';
-import styles from './PageAnalyzer.module.css';
+import './PageAnalyzer.css';
 import { getHeadingColor } from './utils/getHeadingColor.ts';
 import { getHeadingLabel } from './utils/getHeadingLabel.ts';
 
@@ -46,8 +46,8 @@ const PageAnalyzer = () => {
   };
 
   return (
-    <div className={styles.fadeIn}>
-      <div className={styles.titleContainer}>
+    <div className={'fadeIn'}>
+      <div className={'titleContainer'}>
         <Title level={2}>Анализ страницы</Title>
       </div>
 
@@ -89,7 +89,7 @@ const PageAnalyzer = () => {
               showIcon
               message="Анализ SEO-элементов"
               description={
-                <ul className={styles.list}>
+                <ul className={'list'}>
                   <li>Title — заголовок страницы</li>
                   <li>Meta description — описание для поисковиков</li>
                   <li>Заголовки H1-H6 — структура контента</li>
@@ -102,7 +102,7 @@ const PageAnalyzer = () => {
 
         <Col xs={24} lg={12}>
           {pageAnalysis ? (
-            <div className={styles.flexColumn}>
+            <div className={'flexColumn'}>
               {pageAnalysis.error ? (
                 <Card className="card">
                   <Alert
@@ -115,43 +115,46 @@ const PageAnalyzer = () => {
               ) : (
                 <>
                   <Card title="Основная информация" className="card">
-                    <div className={styles.block}>
+                    <div className={'block'}>
                       <Text strong>URL: </Text>
                       <Text copyable>{pageAnalysis.url}</Text>
                     </div>
 
                     <Divider />
 
-                    <div className={styles.block}>
+                    <div className={'block'}>
                       <Text strong>Title:</Text>
-                      <div className={styles.highlightBox}>
+                      <div className={'highlightBox'}>
                         {pageAnalysis.title || <Text type="secondary">Не найден</Text>}
                       </div>
                       {pageAnalysis.title && (
-                        <Text className={styles.secondaryText}>
+                        <Text className={'secondaryText'}>
                           Длина: {pageAnalysis.title.length} символов
                         </Text>
                       )}
                     </div>
 
-                    <div className={styles.block}>
+                    <div className={'block'}>
                       <Text strong>Meta Description:</Text>
-                      <div className={styles.highlightBox}>
+                      <div className={'highlightBox'}>
                         {pageAnalysis.description || <Text type="secondary">Не найден</Text>}
                       </div>
                       {pageAnalysis.description && (
-                        <Text className={styles.secondaryText}>
+                        <Text className={'secondaryText'}>
                           Длина: {pageAnalysis.description.length} символов
                         </Text>
                       )}
                     </div>
                   </Card>
 
-                  <Card title={`Заголовки (${pageAnalysis.headings.length})`} className="card">
+                  <Card
+                    title={`Заголовки (${String(pageAnalysis.headings.length)})`}
+                    className="card"
+                  >
                     {pageAnalysis.headings.length > 0 ? (
-                      <div className={styles.flexColumn}>
+                      <div className={'flexColumn'}>
                         {pageAnalysis.headings.map((heading, index) => (
-                          <div key={index} className={styles.headingTag}>
+                          <div key={index} className={'headingTag'}>
                             <div style={{ marginBottom: 8 }}>
                               <Tag color={getHeadingColor(heading.level)}>H{heading.level}</Tag>
                             </div>
@@ -160,13 +163,13 @@ const PageAnalyzer = () => {
                         ))}
                       </div>
                     ) : (
-                      <div className={styles.centerBlock}>Заголовки не найдены</div>
+                      <div className={'centerBlock'}>Заголовки не найдены</div>
                     )}
                   </Card>
 
                   {pageAnalysis.headings.length > 0 && (
                     <Card title="Структура заголовков" className="card">
-                      <div className={styles.structureText}>
+                      <div className={'structureText'}>
                         {Array.from({ length: 6 }, (_, i) => {
                           const level = i + 1;
                           const count = pageAnalysis.headings.filter(h => h.level === level).length;
@@ -187,7 +190,7 @@ const PageAnalyzer = () => {
             </div>
           ) : (
             <Card className="card">
-              <div className={styles.emptyState}>
+              <div className={'emptyState'}>
                 <GlobalOutlined style={{ fontSize: 48, marginBottom: 16 }} />
                 <Title level={4} style={{ color: 'var(--text-secondary)' }}>
                   Введите URL для анализа

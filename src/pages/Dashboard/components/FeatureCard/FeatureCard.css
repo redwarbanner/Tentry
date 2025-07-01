@@ -4,6 +4,10 @@
     transition: transform 0.2s ease;
 }
 
+.card:hover {
+    transform: translateY(-4px);
+}
+
 .icon {
     text-align: center;
     margin-bottom: 16px;

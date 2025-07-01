@@ -1,13 +1,14 @@
 import { useState } from 'react';
-import { Card, Button, Space, Typography } from 'antd';
+import { Card, Button, Space, Typography, Input } from 'antd';
 import { SaveOutlined, FolderOpenOutlined, FileAddOutlined } from '@ant-design/icons';
-import LexicalEditor from '../../components/LexicalEditor/LexicalEditor';
+
 import { useEditorStorage } from './hooks/useEditorStorage';
 import SaveModal from './components/SaveModal';
 import LoadModal from './components/LoadModal';
 import StatsBar from './components/StatsBar';
 
 const { Title } = Typography;
+const { TextArea } = Input;
 
 const Editor = () => {
   const { content, setContent, savedTexts, saveTexts, currentFileName, setCurrentFileName } =
@@ -101,9 +102,14 @@ const Editor = () => {
           </Space>
         }
       >
-        <LexicalEditor
-          onChange={setContent}
+        <TextArea
+          value={content}
+          onChange={e => {
+            setContent(e.target.value);
+          }}
           placeholder="Начните писать ваш текст здесь. Все изменения автоматически сохраняются в браузере."
+          autoSize={{ minRows: 8, maxRows: 20 }}
+          allowClear
         />
         <StatsBar content={content} />
       </Card>

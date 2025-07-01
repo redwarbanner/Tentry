@@ -15,7 +15,7 @@ const Sidebar = () => {
       <div className="top">
         <div className="branding">
           <BulbOutlined className="icon" />
-          <h1>Tentry</h1>
+          <span className="branding-title">Tentry</span>
         </div>
       </div>
 
@@ -28,10 +28,7 @@ const Sidebar = () => {
         aria-label="Переключить тему"
       >
         <div className={`switch ${isDark ? 'dark' : 'light'}`}>
-          <div className="slider">
-            <div className="icon sun">☀️</div>
-            <div className="icon moon">🌙</div>
-          </div>
+          <div className="slider">{isDark ? '🌙' : '☀️'}</div>
         </div>
       </div>
     </div>

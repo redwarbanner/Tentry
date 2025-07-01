@@ -1,16 +1,14 @@
-import { useState, useEffect } from 'react';
-import { Card, Button, Space, Row, Col, Typography } from 'antd';
-import { ClearOutlined, CopyOutlined, FileSearchOutlined } from '@ant-design/icons';
+import { useState, useEffect, useCallback } from 'react';
+import { Card, Button, Space, Row, Col, Typography, Input } from 'antd';
+import { ClearOutlined } from '@ant-design/icons';
 
-import styles from './styles.module.css';
-import TextCounters from './TextCounters';
-import EmptyStateBlock from './EmptyStateBlock';
-import { type TextAnalysisResult } from './types';
+import './TextAnalyzer.css';
+import EmptyStateBlock from '../../components/EmptyStateBlock/EmptyStateBlock.tsx';
 import { useDebounce } from '../../hooks/useDebounce.ts';
 import { useStore } from '../../store';
-import { analyzeText } from '../../utils/textAnalysis.ts';
-import LexicalEditor from '../../components/LexicalEditor/LexicalEditor.tsx';
 import TextStats from '../../components/TextStats/TextStats.tsx';
+import type { TextAnalysisResult } from '../../types';
+import { analyzeText } from '../../utils';
 
 const { Title } = Typography;
 
@@ -52,36 +50,17 @@ const TextAnalyzer = () => {
     }
   }, [setAnalysisResult]);
 
-  const handleClear = (): void => {
+  const handleClear = useCallback(() => {
     setText('');
     setAnalysisResult(null);
     setCurrentText('');
     localStorage.removeItem('tentry-current-text');
     localStorage.removeItem('tentry-analysis-result');
-  };
-
-  const handlePasteFromClipboard = async (): Promise<void> => {
-    try {
-      const clipboardText = await navigator.clipboard.readText();
-      setText(clipboardText);
-    } catch (error) {
-      console.error('Ошибка чтения из буфера обмена:', error);
-    }
-  };
-
-  const handleAnalyze = (): void => {
-    if (text.trim()) {
-      const result = analyzeText(text);
-      setAnalysisResult(result);
-      setCurrentText(text);
-      localStorage.setItem('tentry-current-text', text);
-      localStorage.setItem('tentry-analysis-result', JSON.stringify(result));
-    }
-  };
+  }, [setAnalysisResult, setCurrentText]);
 
   return (
-    <div className={styles.fadeIn}>
-      <div className={styles.title}>
+    <div className={'fadeIn'}>
+      <div className={'title'}>
         <Title level={2}>Анализ текста</Title>
       </div>
 
@@ -92,34 +71,25 @@ const TextAnalyzer = () => {
             className="card"
             extra={
               <Space>
-                <Button icon={<CopyOutlined />} onClick={handlePasteFromClipboard} size="small">
-                  Вставить
-                </Button>
-                <Button
-                  icon={<FileSearchOutlined />}
-                  onClick={handleAnalyze}
-                  type="primary"
-                  size="small"
-                >
-                  Анализировать
-                </Button>
                 <Button icon={<ClearOutlined />} onClick={handleClear} danger size="small">
                   Очистить
                 </Button>
               </Space>
             }
           >
-            <LexicalEditor
-              onChange={setText}
+            <Input.TextArea
+              value={text}
+              onChange={e => {
+                setText(e.target.value);
+              }}
               placeholder="Введите или вставьте текст для анализа. Анализ выполняется автоматически при наборе текста."
+              autoSize={{ minRows: 8, maxRows: 20 }}
             />
-
-            {text && <TextCounters text={text} />}
           </Card>
         </Col>
 
         <Col xs={24} lg={12}>
-          {analysisResult ? (
+          {analysisResult && text.trim() ? (
             <TextStats
               stats={analysisResult.stats}
               semanticCore={analysisResult.semanticCore}
