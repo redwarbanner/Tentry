@@ -1,6 +1,6 @@
 import { Card, Typography, Row, Col } from 'antd';
 import FeatureGrid from './components/FeatureGrid.tsx';
-import { seoInfo } from './utils/seoInfoBlocks.ts';
+import { seoInfo } from './constants/seoInfoBlocks.ts';
 import './Dashboard.css';
 
 const { Title, Paragraph } = Typography;

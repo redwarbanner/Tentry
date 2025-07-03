@@ -1,14 +1,15 @@
-import { useState } from 'react';
-import { Card, Button, Space, Typography, Input } from 'antd';
-import { SaveOutlined, FolderOpenOutlined, FileAddOutlined } from '@ant-design/icons';
+import { useMemo, useState } from 'react';
+import { Card, Typography, Input } from 'antd';
 
 import { useEditorStorage } from './hooks/useEditorStorage';
+import { useEditorActions } from './hooks/useEditorActions';
+import Toolbar from './components/Toolbar';
 import SaveModal from './components/SaveModal';
 import LoadModal from './components/LoadModal';
 import StatsBar from './components/StatsBar';
+import type { TextFile } from './types';
 
 const { Title } = Typography;
-const { TextArea } = Input;
 
 const Editor = () => {
   const { content, setContent, savedTexts, saveTexts, currentFileName, setCurrentFileName } =
@@ -18,60 +19,35 @@ const Editor = () => {
   const [showLoadModal, setShowLoadModal] = useState(false);
   const [saveFileName, setSaveFileName] = useState('');
 
-  const handleSave = () => {
-    if (currentFileName) {
-      const updated = savedTexts.map(t =>
-        t.id === currentFileName ? { ...t, content, updatedAt: new Date() } : t,
-      );
-      saveTexts(updated);
-    } else {
-      setShowSaveModal(true);
-    }
+  const { handleSave, handleLoad, handleDelete, handleNewFile, updateCurrentFile } =
+    useEditorActions(savedTexts, setContent, setCurrentFileName, currentFileName, saveTexts);
+
+  const displayFileName = useMemo(() => {
+    if (!currentFileName) return 'Новый документ';
+    const found = savedTexts.find(t => t.id === currentFileName);
+    return found?.title ?? 'Новый документ';
+  }, [currentFileName, savedTexts]);
+
+  const closeSaveModal = () => {
+    setShowSaveModal(false);
+    setSaveFileName('');
   };
 
   const handleSaveNew = () => {
     if (!saveFileName.trim()) return;
-    const newText = {
+
+    const newText: TextFile = {
       id: Date.now().toString(),
       title: saveFileName.trim(),
       content,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
+
     const updated = [...savedTexts, newText];
     saveTexts(updated);
-    setCurrentFileName(newText.id);
-    localStorage.setItem('tentry-editor-current-file', newText.id);
-    setShowSaveModal(false);
-    setSaveFileName('');
-  };
-
-  const handleLoad = (text: (typeof savedTexts)[0]) => {
-    setContent(text.content);
-    setCurrentFileName(text.id);
-    localStorage.setItem('tentry-editor-current-file', text.id);
-    setShowLoadModal(false);
-  };
-
-  const handleDelete = (id: string) => {
-    const updated = savedTexts.filter(t => t.id !== id);
-    saveTexts(updated);
-    if (currentFileName === id) {
-      setCurrentFileName('');
-      localStorage.removeItem('tentry-editor-current-file');
-    }
-  };
-
-  const handleNewFile = () => {
-    setContent('');
-    setCurrentFileName('');
-    localStorage.removeItem('tentry-editor-current-file');
-  };
-
-  const getCurrentFileName = () => {
-    if (!currentFileName) return 'Новый документ';
-    const found = savedTexts.find(t => t.id === currentFileName);
-    return found ? found.title : 'Новый документ';
+    updateCurrentFile(newText.id);
+    closeSaveModal();
   };
 
   return (
@@ -81,28 +57,23 @@ const Editor = () => {
       </Title>
 
       <Card
-        title={getCurrentFileName()}
+        title={displayFileName}
         className="card"
         extra={
-          <Space>
-            <Button icon={<FileAddOutlined />} onClick={handleNewFile}>
-              Новый
-            </Button>
-            <Button
-              icon={<FolderOpenOutlined />}
-              onClick={() => {
-                setShowLoadModal(true);
-              }}
-            >
-              Открыть
-            </Button>
-            <Button type="primary" icon={<SaveOutlined />} onClick={handleSave}>
-              Сохранить
-            </Button>
-          </Space>
+          <Toolbar
+            onNew={handleNewFile}
+            onOpen={() => {
+              setShowLoadModal(true);
+            }}
+            onSave={() => {
+              handleSave(content, () => {
+                setShowSaveModal(true);
+              });
+            }}
+          />
         }
       >
-        <TextArea
+        <Input.TextArea
           value={content}
           onChange={e => {
             setContent(e.target.value);
@@ -119,16 +90,16 @@ const Editor = () => {
         fileName={saveFileName}
         setFileName={setSaveFileName}
         onSave={handleSaveNew}
-        onCancel={() => {
-          setShowSaveModal(false);
-          setSaveFileName('');
-        }}
+        onCancel={closeSaveModal}
       />
 
       <LoadModal
         visible={showLoadModal}
         texts={savedTexts}
-        onLoad={handleLoad}
+        onLoad={text => {
+          handleLoad(text);
+          setShowLoadModal(false);
+        }}
         onDelete={handleDelete}
         onCancel={() => {
           setShowLoadModal(false);

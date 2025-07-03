@@ -1,69 +1,138 @@
-# React + TypeScript + Vite
+# ✨ Tentry
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Tentry** — это современное веб-приложение для анализа текста, SEO и проверки уникальности.
 
-Currently, two official plugins are available:
+⚡ Построено на **React + TypeScript + Vite** — быстро, типобезопасно, удобно.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🚀 Возможности
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- 🧠 **Анализ текста**
+    - Подсчёт символов и слов
+    - Уникальные слова и стоп-слова
+    - Водность, классическая и академическая тошнота
+    - Семантическое ядро
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- 🔍 **Проверка уникальности**
+    - Проверка фраз через Google Search
+    - CORS-эвристика: определение, индексируется ли фраза
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+- 🌐 **Анализ страницы**
+    - Извлечение `title`, `meta description`, `h1–h6`
+    - Визуализация SEO-структуры
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- 📝 **Редактор**
+    - Создание и сохранение текстов
+    - Загрузка черновиков из `localStorage`
+
+---
+
+## ⚙️ Как это работает
+
+### 🔎 Проверка уникальности
+
+Фраза оборачивается в кавычки и ищется в Google через скрытый `iframe`.
+
+- Если Google Search загружается (определяется по CORS) → фраза **неуникальна**
+- Если страница не загружается или пустая → **уникальна**
+
+Пример:
+
+```ts
+const searchUrl = `https://www.google.com/search?q="${phrase}"`;
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- Загружается iframe
+- Если доступ к `iframe.contentDocument` вызывает ошибку (из-за CORS) — это значит, что страница загрузилась, и фраза есть в индексе.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 🌐 Анализ страницы
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. HTML страницы загружается через прокси:
+    - [`api.allorigins.win`](https://allorigins.win/)
+    - [`api.codetabs.com`](https://codetabs.com)
+
+2. HTML парсится через `DOMParser`, извлекаются:
+    - `<title>`
+    - `<meta name="description">`
+    - заголовки `h1–h6`
+
+Пример возвращаемого результата:
+
+```ts
+{
+  url: string;
+  title: string;
+  description: string;
+  headings: { level: number; text: string }[];
+}
 ```
+
+### 🧠 Анализ текста
+
+Функция `calculateTextStats(text)` возвращает:
+
+- Количество символов (включая и без пробелов)
+- Количество слов и уникальных слов
+- Количество стоп-слов и процент "водности"
+- Классическая "тошнота" (√макс. повторяемости слова)
+- Академическая "тошнота" (доля повторов в символах)
+
+Пример:
+
+```ts
+{
+  wordCount: 120,
+  uniqueWordCount: 80,
+  waterPercentage: 22.5,
+  classicToxicity: 3.16,
+  academicToxicity: 8.4
+}
+```
+
+---
+
+## 🛠️ Стек технологий
+
+| Технология     | Назначение                        |
+|----------------|-----------------------------------|
+| **React**      | UI и компоненты                   |
+| **TypeScript** | Строгая типизация                 |
+| **Vite**       | Быстрая сборка и dev-сервер       |
+| **Zustand**    | Глобальное состояние              |
+| **Ant Design** | UI-компоненты                     |
+| **SCSS**       | Кастомные стили                   |
+| **Custom Hooks** | Работа с debounce, localStorage, темой |
+
+---
+
+## 📦 Установка
+
+```bash
+git clone https://github.com/redwarbanner/Tentry.git
+cd tentry
+npm install
+npm run dev
+```
+
+---
+
+## 📜 Скрипты
+
+```bash
+ npm run dev        # Локальный запуск
+```
+
+---
+
+## 🧑‍💻 Автор
+
+Разработано с ❤️
+
+📬 Связь: [msv_95](https://t.me/msv_95)
+
+---
+
+## 📝 Лицензия
+
+MIT — делайте с проектом что хотите.
