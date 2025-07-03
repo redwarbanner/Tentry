@@ -6,7 +6,6 @@
 ---
 ## ✨ [🚀 DEMO на Vercel](https://tentry.vercel.app)
 
----
 
 ## 🚀 Возможности
 
